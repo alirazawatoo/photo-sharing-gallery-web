@@ -36,6 +36,7 @@ module.exports = {
   },
   devServer: {
     host: process.env.HOST || "localhost",
+    static: false,
     port: 3000,
     historyApiFallback: true,
     proxy: [{ context: ["/images", "/static"], target: apiUrl }],
