@@ -9,7 +9,7 @@
     "gallery",
     "photos"
   ],
-  "license": "ISC",
+  "license": "MIT",
   "engines": {
     "node": "^22.15.0"
   },
