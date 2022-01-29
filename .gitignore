@@ -1,0 +1,27 @@
+# dependencies
+node_modules/
+
+# build output
+build/
+dist/
+src/refactor-this/bundle.js
+
+# environment
+.env
+.env.*
+!.env.example
+
+# test / tooling output
+coverage/
+.cache/
+.eslintcache
+*.log
+npm-debug.log*
+tmp/
+
+# editors and OS
+.idea/
+.vscode/
+desktop.ini
+**/.DS_Store
+*.swp
