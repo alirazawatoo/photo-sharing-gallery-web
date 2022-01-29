@@ -1,5 +1,3 @@
-import React from "react";
-
 import CategoryScreen from "./CategoryScreen";
 import { ARCHITECTURE } from "../constants/general";
 

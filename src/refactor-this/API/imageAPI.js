@@ -1,4 +1,4 @@
-import { BASE_URL } from "../constants/url";
+import { API_BASE_URL } from "../constants/url";
 
 export const getImages = (category, page = 1, { signal } = {}) => {
   // Validate inputs early to avoid sending malformed requests to the legacy API.
@@ -11,7 +11,7 @@ export const getImages = (category, page = 1, { signal } = {}) => {
   }
 
   const encodedCategory = encodeURIComponent(category);
-  const url = `${BASE_URL}/images?category=${encodedCategory}&page=${page}`;
+  const url = `${API_BASE_URL}/images?category=${encodedCategory}&page=${page}`;
 
   return fetch(url, { signal }).then((response) => {
     if (!response.ok) {

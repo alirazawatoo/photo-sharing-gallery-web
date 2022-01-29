@@ -1,1 +1,2 @@
-export const BASE_URL = "http://localhost:8888";
+// Relative on purpose: the dev server proxies /images and /static to the API.
+export const API_BASE_URL = "";

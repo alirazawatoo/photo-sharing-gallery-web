@@ -1,5 +1,5 @@
 import { getImages } from "../API/imageAPI";
-import { BASE_URL } from "../constants/url";
+import { API_BASE_URL } from "../constants/url";
 
 const jsonResponse = (body, status = 200) => ({
   ok: status >= 200 && status < 300,
@@ -22,7 +22,7 @@ describe("imageAPI", () => {
 
     await expect(getImages("nature & sea", 3)).resolves.toEqual(images);
     expect(fetch).toHaveBeenCalledWith(
-      `${BASE_URL}/images?category=nature%20%26%20sea&page=3`,
+      `${API_BASE_URL}/images?category=nature%20%26%20sea&page=3`,
       { signal: undefined }
     );
   });

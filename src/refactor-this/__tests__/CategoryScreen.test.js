@@ -1,4 +1,3 @@
-import React from "react";
 import { act, render, screen, waitFor } from "@testing-library/react";
 
 import CategoryScreen from "../screens/CategoryScreen";

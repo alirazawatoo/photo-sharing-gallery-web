@@ -1,5 +1,4 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router";
 
 import ArchitectureScreen from "../screens/ArchitectureScreen";
 import FashionScreen from "../screens/FashionScreen";

@@ -1,5 +1,3 @@
-import React from "react";
-
 const Paginator = (props) => {
   const { next, prev, page, end } = props;
 

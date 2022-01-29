@@ -1,5 +1,3 @@
-import React from "react";
-
 const ImageCard = (props) => {
   const { name, url } = props;
 

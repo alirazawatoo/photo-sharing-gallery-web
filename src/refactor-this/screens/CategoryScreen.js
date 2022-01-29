@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { getImages } from "../API/imageAPI";
 import ImageCard from "../components/ImageCard";

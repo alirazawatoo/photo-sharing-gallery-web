@@ -1,16 +1,8 @@
-import React from "react";
-import { Bars } from "react-loader-spinner";
-
-const Loader = () => {
-  return (
-    <div
-      data-testid="loader"
-      className="center"
-      style={{ marginTop: "10%", marginBottom: "10%" }}
-    >
-      <Bars color="grey" height={"50%"} width={"50%"} wrapperClass="loader" />
-    </div>
-  );
-};
+const Loader = () => (
+  <div data-testid="loader" className="loader" role="status">
+    <span className="loader-spinner" aria-hidden="true" />
+    <span className="visually-hidden">Loading photos</span>
+  </div>
+);
 
 export default Loader;

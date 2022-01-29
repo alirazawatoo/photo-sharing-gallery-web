@@ -1,5 +1,3 @@
-import React from "react";
-
 import CategoryScreen from "./CategoryScreen";
 import { NATURE } from "../constants/general";
 
