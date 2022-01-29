@@ -42,16 +42,16 @@ describe("CategoryScreen", () => {
 
     // While only the first request is resolved, the screen should still be loading.
     await act(async () => {
-      d1.resolve({ data: [{ url: "u1", name: "img1" }] });
+      d1.resolve([{ url: "u1", name: "img1" }]);
     });
     expect(screen.getByTestId("loader")).toBeInTheDocument();
     expect(screen.queryByAltText("img1")).not.toBeInTheDocument();
 
     await act(async () => {
-      d2.resolve({ data: [{ url: "u2", name: "img2" }] });
+      d2.resolve([{ url: "u2", name: "img2" }]);
     });
     await act(async () => {
-      d3.resolve({ data: [{ url: "u3", name: "img3" }] });
+      d3.resolve([{ url: "u3", name: "img3" }]);
     });
 
     await waitFor(() => {
@@ -75,9 +75,9 @@ describe("CategoryScreen", () => {
     render(<CategoryScreen category="nature" />);
 
     await act(async () => {
-      d1.resolve({ data: [{ url: "u1", name: "img1" }] });
-      d2.resolve({ data: [{ url: "u2", name: "img2" }] });
-      d3.resolve({ data: [] });
+      d1.resolve([{ url: "u1", name: "img1" }]);
+      d2.resolve([{ url: "u2", name: "img2" }]);
+      d3.resolve([]);
     });
 
     const nextButton = await screen.findByRole("button", { name: "Next" });
@@ -103,8 +103,8 @@ describe("CategoryScreen", () => {
 
     // Settle the remaining promises to avoid any potential dangling async work.
     await act(async () => {
-      d1.resolve({ data: [{ url: "u1", name: "img1" }] });
-      d3.resolve({ data: [{ url: "u3", name: "img3" }] });
+      d1.resolve([{ url: "u1", name: "img1" }]);
+      d3.resolve([{ url: "u3", name: "img3" }]);
     });
 
     await waitFor(() => {

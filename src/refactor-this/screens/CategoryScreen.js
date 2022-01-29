@@ -32,9 +32,9 @@ const CategoryScreen = (props) => {
       .then(([response1, response2, response3]) => {
         if (cancelled) return;
 
-        const data1 = response1?.data ?? [];
-        const data2 = response2?.data ?? [];
-        const data3 = response3?.data ?? [];
+        const data1 = response1 ?? [];
+        const data2 = response2 ?? [];
+        const data3 = response3 ?? [];
 
         setImagesPage1(data1);
         setImagesPage2(data2);
