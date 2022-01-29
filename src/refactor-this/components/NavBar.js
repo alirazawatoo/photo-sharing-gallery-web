@@ -1,8 +1,6 @@
 import { Link } from "react-router";
 
-const NavBar = (props) => {
-  const {} = props;
-
+const NavBar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <Link className="navbar-brand" to="/">

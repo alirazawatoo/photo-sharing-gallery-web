@@ -19,7 +19,11 @@ const apiPagesFor = (screenPage) => {
 const CategoryScreen = ({ category }) => {
   const [page, setPage] = useState(1);
   const [attempt, setAttempt] = useState(0);
+  // A result belongs to one request; until the current request's result
+  // arrives, the screen is loading.
+  const requestKey = `${category}/${page}/${attempt}`;
   const [result, setResult] = useState({
+    key: null,
     status: "loading",
     images: [],
     hasMore: false,
@@ -28,8 +32,6 @@ const CategoryScreen = ({ category }) => {
   useEffect(() => {
     const controller = new AbortController();
     const { signal } = controller;
-
-    setResult((previous) => ({ ...previous, status: "loading" }));
 
     Promise.all(
       apiPagesFor(page).map((apiPage) =>
@@ -40,6 +42,7 @@ const CategoryScreen = ({ category }) => {
         if (signal.aborted) return;
         const probe = responses.pop();
         setResult({
+          key: requestKey,
           status: "ready",
           images: responses.flat(),
           hasMore: probe.length > 0,
@@ -47,13 +50,19 @@ const CategoryScreen = ({ category }) => {
       })
       .catch(() => {
         if (signal.aborted) return;
-        setResult({ status: "error", images: [], hasMore: false });
+        setResult({
+          key: requestKey,
+          status: "error",
+          images: [],
+          hasMore: false,
+        });
       });
 
     return () => controller.abort();
-  }, [category, page, attempt]);
+  }, [category, page, requestKey]);
 
-  const { status, images, hasMore } = result;
+  const status = result.key === requestKey ? result.status : "loading";
+  const { images, hasMore } = result;
   const loading = status === "loading";
 
   let content;

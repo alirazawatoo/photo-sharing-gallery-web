@@ -18,7 +18,8 @@
     "start:api": "node --watch src/do-not-refactor/server.js",
     "start:web": "webpack serve --mode development",
     "build": "webpack --mode production",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "lint": "eslint ."
   },
   "dependencies": {
     "cors": "^2.8.6",
@@ -31,6 +32,7 @@
     "@babel/core": "^7.29.13",
     "@babel/preset-env": "^7.29.7",
     "@babel/preset-react": "^7.29.7",
+    "@eslint/js": "^9.39.5",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
@@ -39,6 +41,10 @@
     "babel-loader": "^10.1.1",
     "concurrently": "^10.0.7",
     "css-loader": "^7.1.5",
+    "eslint": "^9.39.5",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.14.0",
     "html-webpack-plugin": "^5.6.8",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^30.5.2",
