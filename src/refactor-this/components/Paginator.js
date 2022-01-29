@@ -6,30 +6,25 @@ const Paginator = (props) => {
   const isNextDisabled = busy || Boolean(end);
 
   return (
-    <div className="center">
-      <ul className="pagination pagination-lg justify-content-center">
-        <li className={`page-item ${isPrevDisabled ? "disabled" : ""}`}>
-          <button
-            type="button"
-            className="page-link"
-            disabled={isPrevDisabled}
-            onClick={prev}
-          >
-            Previous
-          </button>
-        </li>
-        <li className={`page-item ${isNextDisabled ? "disabled" : ""}`}>
-          <button
-            type="button"
-            className="page-link"
-            disabled={isNextDisabled}
-            onClick={next}
-          >
-            Next
-          </button>
-        </li>
-      </ul>
-    </div>
+    <nav className="pager" aria-label="Pages">
+      <button
+        type="button"
+        className="button"
+        disabled={isPrevDisabled}
+        onClick={prev}
+      >
+        Previous
+      </button>
+      <span className="pager-status">Sheet {page}</span>
+      <button
+        type="button"
+        className="button"
+        disabled={isNextDisabled}
+        onClick={next}
+      >
+        Next
+      </button>
+    </nav>
   );
 };
 

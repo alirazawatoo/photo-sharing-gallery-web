@@ -1,26 +1,24 @@
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 
-const NavBar = () => {
-  return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <Link className="navbar-brand" to="/">
-        Photo Sharing App
-      </Link>
-      <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div className="navbar-nav">
-          <Link to="/" className="nav-link active">
-            Nature
-          </Link>
-          <Link to="/architecture" className="nav-link active">
-            Architecture
-          </Link>
-          <Link to="/fashion" className="nav-link active">
-            fashion
-          </Link>
-        </div>
-      </div>
+import { CATEGORIES } from "../constants/general";
+
+const NavBar = () => (
+  <header className="masthead">
+    <Link className="brand" to="/">
+      Photo Sharing <em>Gallery</em>
+    </Link>
+    <nav aria-label="Categories">
+      <ul className="tabs">
+        {CATEGORIES.map(({ slug, label, path }) => (
+          <li key={slug}>
+            <NavLink className="tab" to={path} end>
+              {label}
+            </NavLink>
+          </li>
+        ))}
+      </ul>
     </nav>
-  );
-};
+  </header>
+);
 
 export default NavBar;

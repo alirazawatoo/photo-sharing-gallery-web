@@ -98,16 +98,16 @@ describe("CategoryScreen", () => {
     expect(await screen.findAllByRole("img")).toHaveLength(9);
     await user.click(screen.getByRole("button", { name: "Next" }));
 
-    expect(await screen.findByAltText("architecture_10")).toBeInTheDocument();
+    expect(await screen.findByAltText("Architecture photo 10")).toBeInTheDocument();
     expect(getImages).toHaveBeenCalledWith("architecture", 7, expect.anything());
-    expect(screen.queryByAltText("architecture_1")).not.toBeInTheDocument();
+    expect(screen.queryByAltText("Architecture photo 1")).not.toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Next" }));
     expect(await screen.findAllByRole("img")).toHaveLength(5);
     expect(screen.getByRole("button", { name: "Next" })).toBeDisabled();
 
     await user.click(screen.getByRole("button", { name: "Previous" }));
-    expect(await screen.findByAltText("architecture_10")).toBeInTheDocument();
+    expect(await screen.findByAltText("Architecture photo 10")).toBeInTheDocument();
   });
 
   test("keeps both paging buttons disabled while a screen loads", async () => {
