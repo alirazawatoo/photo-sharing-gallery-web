@@ -17,7 +17,7 @@ describe("imageAPI", () => {
   });
 
   test("encodes category and passes the correct page to the legacy API", async () => {
-    const images = [{ name: "nature_7", url: "u7" }];
+    const images = [{ name: "nature_7", url: "/static/nature_7.jpeg" }];
     fetch.mockResolvedValue(jsonResponse(images));
 
     await expect(getImages("nature & sea", 3)).resolves.toEqual(images);
@@ -25,6 +25,26 @@ describe("imageAPI", () => {
       `${API_BASE_URL}/images?category=nature%20%26%20sea&page=3`,
       { signal: undefined }
     );
+  });
+
+  test("rewrites absolute image URLs to same-origin paths", async () => {
+    fetch.mockResolvedValue(
+      jsonResponse([
+        {
+          name: "nature_1",
+          category: "nature",
+          url: "http://localhost:8888/static/images/nature/nature_1.jpeg",
+        },
+      ])
+    );
+
+    await expect(getImages("nature", 1)).resolves.toEqual([
+      {
+        name: "nature_1",
+        category: "nature",
+        url: "/static/images/nature/nature_1.jpeg",
+      },
+    ]);
   });
 
   test("forwards an abort signal", async () => {

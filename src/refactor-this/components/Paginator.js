@@ -1,8 +1,9 @@
 const Paginator = (props) => {
-  const { next, prev, page, end } = props;
+  const { next, prev, page, end, busy = false } = props;
 
-  const isPrevDisabled = page === 1;
-  const isNextDisabled = Boolean(end);
+  // Paging while a screen is still loading would race two fetches.
+  const isPrevDisabled = busy || page === 1;
+  const isNextDisabled = busy || Boolean(end);
 
   return (
     <div className="center">
@@ -12,9 +13,7 @@ const Paginator = (props) => {
             type="button"
             className="page-link"
             disabled={isPrevDisabled}
-            onClick={() => {
-              if (!isPrevDisabled) prev();
-            }}
+            onClick={prev}
           >
             Previous
           </button>
@@ -24,9 +23,7 @@ const Paginator = (props) => {
             type="button"
             className="page-link"
             disabled={isNextDisabled}
-            onClick={() => {
-              if (!isNextDisabled) next();
-            }}
+            onClick={next}
           >
             Next
           </button>

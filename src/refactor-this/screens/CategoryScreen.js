@@ -5,97 +5,104 @@ import ImageCard from "../components/ImageCard";
 import Loader from "../components/Loader";
 import Paginator from "../components/Paginator";
 
-const CategoryScreen = (props) => {
-  const { category } = props;
+// The API caps every response at three images; one screen shows nine.
+export const API_PAGES_PER_SCREEN = 3;
 
-  const [loading, setLoading] = useState(true);
+const apiPagesFor = (screenPage) => {
+  const first = (screenPage - 1) * API_PAGES_PER_SCREEN + 1;
+  // One extra page tells us whether another screen exists. Without it, a
+  // category whose size is a multiple of nine leaves Next enabled on an
+  // empty final screen.
+  return Array.from({ length: API_PAGES_PER_SCREEN + 1 }, (_, i) => first + i);
+};
+
+const CategoryScreen = ({ category }) => {
   const [page, setPage] = useState(1);
-  const [end, setEnd] = useState(false);
-  const [imagesPage1, setImagesPage1] = useState([]);
-  const [imagesPage2, setImagesPage2] = useState([]);
-  const [imagesPage3, setImagesPage3] = useState([]);
+  const [attempt, setAttempt] = useState(0);
+  const [result, setResult] = useState({
+    status: "loading",
+    images: [],
+    hasMore: false,
+  });
 
   useEffect(() => {
-    let cancelled = false;
+    const controller = new AbortController();
+    const { signal } = controller;
 
-    setLoading(true);
+    setResult((previous) => ({ ...previous, status: "loading" }));
 
-    const page1 = page * 3 - 2;
-    const page2 = page * 3 - 1;
-    const page3 = page * 3;
-
-    Promise.all([
-      getImages(category, page1),
-      getImages(category, page2),
-      getImages(category, page3),
-    ])
-      .then(([response1, response2, response3]) => {
-        if (cancelled) return;
-
-        const data1 = response1 ?? [];
-        const data2 = response2 ?? [];
-        const data3 = response3 ?? [];
-
-        setImagesPage1(data1);
-        setImagesPage2(data2);
-        setImagesPage3(data3);
-        setEnd(data3.length === 0);
+    Promise.all(
+      apiPagesFor(page).map((apiPage) =>
+        getImages(category, apiPage, { signal })
+      )
+    )
+      .then((responses) => {
+        if (signal.aborted) return;
+        const probe = responses.pop();
+        setResult({
+          status: "ready",
+          images: responses.flat(),
+          hasMore: probe.length > 0,
+        });
       })
-      .catch((error) => {
-        if (cancelled) return;
-
-        // Keep the UI consistent: stop loading and clear current results.
-        // We set `end=true` so the user can't keep paging forward without data.
-        // eslint-disable-next-line no-console
-        console.error("Failed loading images:", error);
-        setImagesPage1([]);
-        setImagesPage2([]);
-        setImagesPage3([]);
-        setEnd(true);
-      })
-      .finally(() => {
-        if (cancelled) return;
-        setLoading(false);
+      .catch(() => {
+        if (signal.aborted) return;
+        setResult({ status: "error", images: [], hasMore: false });
       });
 
-    return () => {
-      cancelled = true;
-    };
-  }, [category, page]);
+    return () => controller.abort();
+  }, [category, page, attempt]);
+
+  const { status, images, hasMore } = result;
+  const loading = status === "loading";
+
+  let content;
+  if (loading) {
+    content = <Loader />;
+  } else if (status === "error") {
+    content = (
+      <div className="notice" role="alert">
+        <p>The photos could not be loaded. The image service may be down.</p>
+        <button
+          type="button"
+          className="button"
+          onClick={() => setAttempt((count) => count + 1)}
+        >
+          Try again
+        </button>
+      </div>
+    );
+  } else if (images.length === 0) {
+    content = (
+      <div className="notice">
+        <p>No photos on this page.</p>
+      </div>
+    );
+  } else {
+    content = (
+      <div id="images" className="row row-cols-3">
+        {images.map((image) => (
+          <ImageCard url={image.url} name={image.name} key={image.url} />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <>
-      <div className="container">
-        <div id="images" className="row row-cols-3">
-          {loading ? (
-            <Loader />
-          ) : (
-            <>
-              {imagesPage1.map((image) => (
-                <ImageCard url={image.url} name={image.name} key={image.url} />
-              ))}
-
-              {imagesPage2.map((image) => (
-                <ImageCard url={image.url} name={image.name} key={image.url} />
-              ))}
-
-              {imagesPage3.map((image) => (
-                <ImageCard url={image.url} name={image.name} key={image.url} />
-              ))}
-            </>
-          )}
-        </div>
+      <div className="container" aria-busy={loading}>
+        {content}
       </div>
 
       <Paginator
         prev={() => setPage((prevPage) => prevPage - 1)}
         next={() => setPage((prevPage) => prevPage + 1)}
         page={page}
-        end={end}
+        end={!hasMore}
+        busy={loading}
       />
     </>
   );
 };
 
 export default CategoryScreen;
-
